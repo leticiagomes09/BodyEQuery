@@ -3,7 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 
 import dados from "./src/data/dados.js";
-const {bruxos, casas, varinhas, animais, pocoes} = dados;
+const {bruxos, varinhas, pocoes} = dados;
 
 // Criar aplicação com Express e configurar para aceitar JSON
 const app = express();
@@ -47,6 +47,100 @@ app.get('/bruxos', (req, res) => {
     });
 });
 
+
+//Adicionar o bruxo na minha lista 
+app.post("/bruxos", (req, res) => {
+  const { nome, casa, ano, varinha, mascote, patrono, especialidade, vivo} = req.body;
+
+  if (!nome || !casa) {
+      return res.status(400).json({
+        success: false,
+        message: "Nome e casa não são obrigatorios para um bruxo!"
+      });
+  }
+
+  const novoBruxo ={
+    id : bruxos.length + 1,
+    nome,
+    casa: casa,
+    ano: parseInt(ano),
+    varinha: varinha,
+    mascote,
+    patrono,
+    especialidade: especialidade || "Ainda não atribuido",
+    vivo: vivo
+  }
+
+  bruxos.push(novoBruxo);
+
+  res.status(201).json({
+    success: true,
+    message: "Novo bruxo adicionado a Hogwarts!",
+    data: novoBruxo,
+  });
+})
+
+
+// Modificar a rota varinhas 
+app.get ('/varinhas', (req, res) => {
+  const { material, nucleo } = req.query;
+  let resultadoVarinhas = varinhas;
+
+
+  if (material) {
+    resultadoVarinhas = resultadoVarinhas.filter(v => v.material.toLowerCase() === material.toLowerCase());
+  }
+
+  if (nucleo) {
+    resultadoVarinhas = resultadoVarinhas.filter(v => v.nucleo == nucleo);
+  }
+
+  res.status(200).json({
+    total: resultadoVarinhas.length,
+    data: resultadoVarinhas
+  });
+}) 
+
+
+// Modificar a rota poçôes
+app.get ('/pocoes', (req, res) => {
+  const { nome, efeito } = req.query;
+  let resultadoPocoes = pocoes;
+
+  if (nome) {
+    resultadoPocoes = resultadoPocoes.filter(p => p.nome.toLowerCase() === nome.toLowerCase());
+  }
+
+  if (efeito) {
+    resultadoPocoes = resultadoPocoes.filter(p => p.efeito === efeito);
+  }
+
+  res.status(200).json({
+    total: resultadoPocoes.length,
+    data: resultadoPocoes
+  });
+})
+
+
+// Modificar a rota animais
+
+app.get ('/animais', (req, res) => {
+  const { tipo, nome } = req.query;
+  let resultadoAnimais = animais;
+
+  if (tipo) {
+    resultadoPocoes = resultadoPocoes.filter(p => p.nome.toLowerCase() === nome.toLowerCase());
+  }
+
+  if (efeito) {
+    resultadoPocoes = resultadoPocoes.filter(p => p.efeito === efeito);
+  }
+
+  res.status(200).json({
+    total: resultadoPocoes.length,
+    data: resultadoPocoes
+  });
+})
 // Iniciar servidor escutando na porta definida
 app.listen(serverPort, () => {
     console.log(`🚀 Servidor rodando em http://localhost:${serverPort} 🚀`);
