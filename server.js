@@ -108,20 +108,15 @@ app.post("/varinhas", (req, res) => {
   if (!materia || !nucleo || !comprimento) {
       return res.status(400).json({
         success: false,
-        message: "Material e nucleo são obrigatorios!"
+        message: "Material, nucleo E comprimento são obrigatorios!"
       });
   }
 
   const novaVarinha ={
-    id : bruxos.length + 1,
-    nome,
-    casa: casa,
-    ano: parseInt(ano),
-    varinha: varinha,
-    mascote,
-    patrono,
-    especialidade: especialidade || "Ainda não atribuido",
-    vivo: vivo
+    id : varinhas.length + 1,
+    material: material,
+    nucleo: nucleo,
+    comprimento: comprimento
   }
 
   varinhas.push(novaVarinha);
