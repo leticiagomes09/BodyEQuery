@@ -101,6 +101,38 @@ app.get ('/varinhas', (req, res) => {
   });
 }) 
 
+//Adicionar nova varinha na minha lista 
+app.post("/varinhas", (req, res) => {
+  const { material, nucleo, comprimento} = req.body;
+
+  if (!materia || !nucleo || !comprimento) {
+      return res.status(400).json({
+        success: false,
+        message: "Material e nucleo são obrigatorios!"
+      });
+  }
+
+  const novaVarinha ={
+    id : bruxos.length + 1,
+    nome,
+    casa: casa,
+    ano: parseInt(ano),
+    varinha: varinha,
+    mascote,
+    patrono,
+    especialidade: especialidade || "Ainda não atribuido",
+    vivo: vivo
+  }
+
+  varinhas.push(novaVarinha);
+
+  res.status(201).json({
+    success: true,
+    message: "Nova varinha adicionada!",
+    data: novaVarinha,
+  });
+})
+
 
 // Modificar a rota poçôes
 app.get ('/pocoes', (req, res) => {
